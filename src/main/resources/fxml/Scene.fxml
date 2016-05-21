@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.unideb.inf.prtchess.gui.FXMLController">
+   <children>
+      <Canvas fx:id="tableCanvas" height="400.0" onMousePressed="#dragStart" onMouseReleased="#dragEnd" width="400.0" />
+      <Button layoutX="471.0" layoutY="91.0" mnemonicParsing="false" onAction="#moveBack" text="&lt;" />
+      <Label fx:id="status" layoutX="470.0" layoutY="154.0" text="Label" />
+      <Button layoutX="464.0" layoutY="200.0" mnemonicParsing="false" onAction="#save" text="Save" />
+   </children>
+</AnchorPane>
