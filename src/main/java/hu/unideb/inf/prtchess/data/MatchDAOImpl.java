@@ -6,11 +6,10 @@
 package hu.unideb.inf.prtchess.data;
 
 import hu.unideb.inf.prtchess.Field;
-import hu.unideb.inf.prtchess.Move;
+import hu.unideb.inf.prtchess.PieceType;
+import hu.unideb.inf.prtchess.properties.ChessProperties;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +28,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -47,14 +45,45 @@ public class MatchDAOImpl implements MatchDAO {
     static
     {
        
-        uri = "D:\\matches.xml";
+        uri = ChessProperties.getXMLFilePath();
         
         dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
         
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {  
             builder = factory.newDocumentBuilder();
+            
+            //check for storage file and if doesn't exists create it.
+            File file = new File(uri);
+            if(!file.exists())
+            {
+                Document doc = builder.newDocument();
+                Node root = doc.createElement("matches");
+                
+                doc.appendChild(root);
+                
+                MatchDAOImpl.save(doc);
+            }
+            
         } catch (ParserConfigurationException ex) {
+            Logger.getLogger(MatchDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private static void save(Document doc)
+    {
+        TransformerFactory tFact = TransformerFactory.newInstance();
+        try {
+            Transformer trans = tFact.newTransformer();
+            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(doc);
+            StreamResult newFile = new StreamResult(
+                    new File(uri));
+            
+            trans.transform(source, newFile);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(MatchDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
             Logger.getLogger(MatchDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -78,14 +107,14 @@ public class MatchDAOImpl implements MatchDAO {
         NodeList moves = element.getElementsByTagName("move");
         for(int i=0;i<moves.getLength();i++)
         {
-            Move move = generateMoveFromMoveNode(moves.item(i));
+            StoredMove move = generateMoveFromMoveNode(moves.item(i));
             match.getMoves().add(move);
         }
         
         return match;
     }
     
-    private Move generateMoveFromMoveNode(Node node)
+    private StoredMove generateMoveFromMoveNode(Node node)
     {
         Element moveElement = (Element) node;
 
@@ -95,7 +124,13 @@ public class MatchDAOImpl implements MatchDAO {
         Node endFieldNode = moveElement.getElementsByTagName("endfield").item(0);
         Field endField = this.genereateFieldFromFieldNode(endFieldNode);
         
-        Move move = new Move(startField, endField);
+        StoredMove move = new StoredMove(startField, endField);
+        
+        if(moveElement.getElementsByTagName("piecetype").getLength() > 0)
+        {
+            PieceType pieceType = PieceType.valueOf(moveElement.getElementsByTagName("piecetype").item(0).getTextContent());
+            move.setPieceType(pieceType);
+        }
         
         return move;
     }
@@ -117,7 +152,7 @@ public class MatchDAOImpl implements MatchDAO {
         dateElement.appendChild(doc.createTextNode(dateFormat.format(match.getDate())));
         matchElement.appendChild(dateElement);
         
-        for(Move move : match.getMoves())
+        for(StoredMove move : match.getMoves())
         {
             Node moveNode = doc.createElement("move");
             
@@ -149,6 +184,14 @@ public class MatchDAOImpl implements MatchDAO {
             
             moveNode.appendChild(startFieldNode);
             moveNode.appendChild(endFieldNode);
+                        
+            if(move.getPieceType() != null)
+            {
+                Node pieceTypeNode = doc.createElement("piecetype");
+                pieceTypeNode.appendChild(doc.createTextNode(move.getPieceType().toString()));
+                moveNode.appendChild(pieceTypeNode);
+            }
+            
             
             matchElement.appendChild(moveNode);
         }
@@ -177,28 +220,14 @@ public class MatchDAOImpl implements MatchDAO {
 
     @Override
     public void addMatch(Match match) {
-        try {
+        try {          
             Document doc = builder.parse(uri);
-            
             this.appendMatchNode(doc, match);
-            
-            TransformerFactory tFact = TransformerFactory.newInstance();
-            Transformer trans = tFact.newTransformer();
-            trans.setOutputProperty(OutputKeys.INDENT, "yes");
-            
-            DOMSource source = new DOMSource(doc);
-            StreamResult newFile = new StreamResult(
-                    new File(uri));
-            
-            trans.transform(source, newFile);
-        } catch (SAXException | IOException | TransformerException ex) {
+            MatchDAOImpl.save(doc);
+        } catch (SAXException | IOException ex) {
             Logger.getLogger(MatchDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
 
-    @Override
-    public Match getMatchByDate(Date date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

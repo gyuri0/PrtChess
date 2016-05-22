@@ -27,7 +27,7 @@ public class StandardMovePiece extends Piece{
     }
     
     @Override
-    protected List<Field> getControlledFields(TableState tableState)
+    protected List<Field> getControlledFields(Table tableState)
     {
         List<Field> returnList = new ArrayList<>();       
         

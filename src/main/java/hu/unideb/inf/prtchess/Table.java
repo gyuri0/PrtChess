@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author György
  */
-public class TableState {
+public class Table {
     private List<Piece> pieces = new ArrayList<Piece>();
     private List<MoveWithDetails> moves = new ArrayList<MoveWithDetails>();
 

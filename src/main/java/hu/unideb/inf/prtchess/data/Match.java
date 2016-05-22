@@ -17,7 +17,7 @@ import java.util.List;
 public class Match {
     private Date date;
     
-    private List<Move> moves;
+    private List<StoredMove> moves;
     
     public Match()
     {
@@ -32,11 +32,17 @@ public class Match {
         this.date = date;
     }
 
-    public List<Move> getMoves() {
+    public List<StoredMove> getMoves() {
         return moves;
     }
 
-    public void setMoves(List<Move> moves) {
+    public void setMoves(List<StoredMove> moves) {
         this.moves = moves;
-    }    
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.date.toString();
+    }
 }

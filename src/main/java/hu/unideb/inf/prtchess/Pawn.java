@@ -46,7 +46,7 @@ public class Pawn extends Piece{
     }
     
     @Override
-    public List<Field> getControlledFields(TableState tableState) {
+    public List<Field> getControlledFields(Table tableState) {
         List<Field> returnList = new ArrayList<>();
         
         Field oneBefore = this.position.getAdjancent(this.moveDirection(), 0);
@@ -99,7 +99,7 @@ public class Pawn extends Piece{
     }
 
     @Override
-    public MoveWithDetails Move(TableState tableState, Field endField)
+    public MoveWithDetails Move(Table tableState, Field endField)
     {       
         Piece piece = tableState.getPiece(endField);
         if(piece == null && endField.getColumn() != this.position.getColumn())
@@ -118,7 +118,7 @@ public class Pawn extends Piece{
     }
     
     @Override 
-    public void ReverseMove(TableState tableState, MoveWithDetails move)
+    public void ReverseMove(Table tableState, MoveWithDetails move)
     {        
         if(move.isEnPassant())
         {

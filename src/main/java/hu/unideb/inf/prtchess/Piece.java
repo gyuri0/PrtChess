@@ -59,9 +59,9 @@ public abstract class Piece {
         return this.position.equals(piece.position);
     }
     
-    protected abstract List<Field> getControlledFields(TableState tableState);
+    protected abstract List<Field> getControlledFields(Table tableState);
     
-    public List<Field> getAvailableFields(TableState tableState)
+    public List<Field> getAvailableFields(Table tableState)
     {
         Field currentField = this.position;
         List<Field> availableFields = new ArrayList<Field>();
@@ -85,7 +85,7 @@ public abstract class Piece {
         return availableFields;
     }
     
-    public MoveWithDetails Move(TableState tableState, Field endField)
+    public MoveWithDetails Move(Table tableState, Field endField)
     {
         MoveWithDetails move = new MoveWithDetails(this.getPosition(), endField);
         Piece endPiece = tableState.getPiece(endField);
@@ -102,7 +102,7 @@ public abstract class Piece {
         return move;
     }
     
-    public void ReverseMove(TableState tableState, MoveWithDetails move)
+    public void ReverseMove(Table tableState, MoveWithDetails move)
     {
         this.setPosition(move.getStart());
         

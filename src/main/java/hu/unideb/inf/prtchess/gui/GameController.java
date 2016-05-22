@@ -6,12 +6,8 @@ import hu.unideb.inf.prtchess.Game;
 import hu.unideb.inf.prtchess.Move;
 import hu.unideb.inf.prtchess.Piece;
 import hu.unideb.inf.prtchess.PieceType;
-import hu.unideb.inf.prtchess.data.Match;
-import hu.unideb.inf.prtchess.data.MatchDAOImpl;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,7 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 
-public class FXMLController implements Initializable {
+public class GameController implements Initializable {
     
     private GraphicsContext gc;
     private Game game;
@@ -63,7 +59,13 @@ public class FXMLController implements Initializable {
         this.game = new Game();
         this.Refresh();
     }
-        
+     
+    public void setGame(Game game)
+    {
+        this.game = game;
+        this.Refresh();
+    }
+    
     @FXML 
     private void moveBack(ActionEvent event)
     {

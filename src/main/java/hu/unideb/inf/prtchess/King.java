@@ -22,7 +22,7 @@ public class King extends StandardMovePiece {
     
     /*
     @Override
-    public List<Field> getAvailableFields(TableState tableState) {
+    public List<Field> getAvailableFields(Table tableState) {
         List<Field> returnList = new ArrayList<Field>();
         
         int[] rd = new int[]{ -1, -1, -1, 0, 0, 1, 1, 1};
@@ -97,7 +97,7 @@ public class King extends StandardMovePiece {
     */
     
     @Override 
-    public MoveWithDetails Move(TableState tableState, Field endField)
+    public MoveWithDetails Move(Table tableState, Field endField)
     {
         
         //is this move a castling left?
@@ -116,7 +116,7 @@ public class King extends StandardMovePiece {
     }
     
     @Override
-    public void ReverseMove(TableState tableState, MoveWithDetails move)
+    public void ReverseMove(Table tableState, MoveWithDetails move)
     {
         
         if(move.getStart().getColumn() - move.getEnd().getColumn() == 2)

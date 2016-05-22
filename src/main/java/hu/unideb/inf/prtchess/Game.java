@@ -7,7 +7,8 @@ package hu.unideb.inf.prtchess;
 
 import hu.unideb.inf.prtchess.data.Match;
 import hu.unideb.inf.prtchess.data.MatchDAO;
-import hu.unideb.inf.prtchess.data.MatchDAOImpl;
+import hu.unideb.inf.prtchess.data.StoredMove;
+import hu.unideb.inf.prtchess.gui.MainApp;
 import java.util.Date;
 
 /**
@@ -16,14 +17,18 @@ import java.util.Date;
  */
 public class Game {
     
-    private TableState currentState;
+    private Table currentState;
     
     public static Game getGameFromMatch(Match match)
     {
         Game game = new Game();
-        for(Move move : match.getMoves())
+        for(StoredMove move : match.getMoves())
         {
-            game.move(move);
+            game.move(new Move(move.getStart(), move.getEnd()));
+            if(move.getPieceType() != null)
+            {
+                game.selectPromotion(move.getPieceType());
+            }
         }
         
         return game;
@@ -31,7 +36,7 @@ public class Game {
     
     public Game()
     {
-        this.currentState = new TableState();
+        this.currentState = new Table();
         this.currentState.initialize();
     }
     
@@ -45,7 +50,7 @@ public class Game {
         return this.currentState.getPlayerToMove();
     }
     
-    public TableState getTableState()
+    public Table getTableState()
     {
         return this.currentState;
     }
@@ -76,10 +81,17 @@ public class Game {
         match.setDate(new Date());
         for(int i=0;i < this.currentState.getMoves().size(); i++)
         {
-            match.getMoves().add(this.currentState.getMoves().get(i));
+            MoveWithDetails move = this.currentState.getMoves().get(i);
+            StoredMove storedMove = new StoredMove(move.getStart(), move.getEnd());
+            if(move.getPromotion() != null)
+            {
+               storedMove.setPieceType(move.getPromotion());
+            }
+            
+            match.getMoves().add(storedMove);
         }
         
-        MatchDAO daoImpl = new MatchDAOImpl();
-        daoImpl.addMatch(match);
+        
+        MainApp.MatchDAO.addMatch(match);
     }
 }

@@ -1,5 +1,7 @@
 package hu.unideb.inf.prtchess.gui;
 
+import hu.unideb.inf.prtchess.data.MatchDAO;
+import hu.unideb.inf.prtchess.data.MatchDAOImpl;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -9,14 +11,21 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
+    public static MatchDAO MatchDAO;
+    
+    static
+    {
+        MainApp.MatchDAO = new MatchDAOImpl();
+    }
+    
     @Override
     public void start(Stage stage) throws Exception {
-       Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Index.fxml"));
         
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
 
-        stage.setTitle("JavaFX and Maven");
+        stage.setTitle("Prt chess");
         stage.setScene(scene);
         stage.show();
         

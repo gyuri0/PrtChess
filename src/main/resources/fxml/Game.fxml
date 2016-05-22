@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.unideb.inf.prtchess.gui.FXMLController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.unideb.inf.prtchess.gui.GameController">
    <children>
       <Canvas fx:id="tableCanvas" height="400.0" onMousePressed="#dragStart" onMouseReleased="#dragEnd" width="400.0" />
       <Button layoutX="471.0" layoutY="91.0" mnemonicParsing="false" onAction="#moveBack" text="&lt;" />

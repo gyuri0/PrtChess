@@ -16,7 +16,7 @@ public class TableTest {
     
     @Test
     public void initializeTest() {
-        TableState table = new TableState();
+        Table table = new Table();
         table.initialize();
         
         Piece piece = table.getPiece(new Field(0, 0));
@@ -29,7 +29,7 @@ public class TableTest {
     
     @Test
     public void getKingPositionTest(){
-        TableState table = new TableState();
+        Table table = new Table();
         table.initialize();
         
         assertEquals(new Field(0, 4), table.getKingPosition(Color.White));
@@ -39,7 +39,7 @@ public class TableTest {
     @Test
     public void getAvailableFieldTest()
     {
-        TableState table = new TableState();
+        Table table = new Table();
         table.initialize();
         
         assertEquals(20, table.getAvailableFields(Color.White).size());
