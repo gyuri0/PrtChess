@@ -47,7 +47,7 @@ public class MatchDAOImpl implements MatchDAO {
        
         uri = ChessProperties.getXMLFilePath();
         
-        dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {  
@@ -231,8 +231,25 @@ public class MatchDAOImpl implements MatchDAO {
     }
 
     @Override
-    public void deleteMatchByDate(Date date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteMatch(Match match) 
+    {
+        try {
+            Document doc = builder.parse(uri);
+            NodeList matchNodes = doc.getElementsByTagName("match");
+            
+            for(int i=0;i<matchNodes.getLength(); i++)
+            {
+                Match currentMatch = this.generateMatchFromMatchNode(matchNodes.item(i));
+                if(currentMatch.getDate().equals(match.getDate()))
+                {
+                    doc.getElementsByTagName("matches").item(0).removeChild(matchNodes.item(i));
+                }
+            }
+            
+            save(doc);
+        } catch (SAXException | IOException ex) {
+            Logger.getLogger(MatchDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

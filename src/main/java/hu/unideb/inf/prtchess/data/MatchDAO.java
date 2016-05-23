@@ -17,5 +17,5 @@ public interface MatchDAO {
     
     public void addMatch(Match match);
     
-    public void deleteMatchByDate(Date name);
+    public void deleteMatch(Match match);
 }

@@ -37,6 +37,10 @@ public class LoadGameController implements Initializable {
     private void loadGame(ActionEvent actionEvent)
     {
         Match match = (Match) choiceBox.getValue();
+        if(match == null)
+        {
+            return;
+        }
         Game game = Game.getGameFromMatch(match);
         
         Parent root;
@@ -54,6 +58,14 @@ public class LoadGameController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @FXML
+    public void deleteGame(ActionEvent actionEvent)
+    {
+        MainApp.MatchDAO.deleteMatch((Match)this.choiceBox.getValue());
+        this.choiceBox.getItems().remove(this.choiceBox.getValue());
+        
     }
     
     public LoadGameController()
