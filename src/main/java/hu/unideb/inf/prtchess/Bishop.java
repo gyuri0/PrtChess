@@ -13,12 +13,13 @@ import java.util.List;
  * @author György
  */
 public class Bishop extends StandardMovePiece {
-    public Bishop(Field position, Color color)
+    public Bishop(Field position, Color color, Table table)
     {
         super(position, color, PieceType.Bishop,
                 new int[]{ -1, -1, 1, 1},
                 new int[]{ -1, 1, -1, 1},
-                true
+                true,
+                table
                 );
     }  
 

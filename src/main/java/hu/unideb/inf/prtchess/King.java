@@ -11,12 +11,13 @@ package hu.unideb.inf.prtchess;
  */
 public class King extends StandardMovePiece {
     
-    public King(Field position, Color color)
+    public King(Field position, Color color, Table table)
     {
         super(position, color, PieceType.King,
                 new int[]{ -1, -1, -1, 0, 0, 1, 1, 1},
                 new int[]{ -1, 0, 1, -1, 1, -1, 0, 1},
-                false
+                false,
+                table
                 );
     }
     
@@ -97,42 +98,42 @@ public class King extends StandardMovePiece {
     */
     
     @Override 
-    public MoveWithDetails Move(Table tableState, Field endField)
+    public MoveWithDetails Move(Field endField)
     {
         
         //is this move a castling left?
         if(this.position.getColumn() - endField.getColumn() == 2)
         {
-            Piece leftRook = tableState.getPiece(this.position.getAdjancent(0, -4));
+            Piece leftRook = this.table.getPiece(this.position.getAdjancent(0, -4));
             leftRook.position = leftRook.position.getAdjancent(0, 3);
         }
         else if(this.position.getColumn() - endField.getColumn() == -2)
         {
-            Piece rightRook = tableState.getPiece(this.position.getAdjancent(0, 3));
+            Piece rightRook = this.table.getPiece(this.position.getAdjancent(0, 3));
             rightRook.position = rightRook.position.getAdjancent(0, -2);
         }
         
-        return super.Move(tableState, endField);
+        return super.Move(endField);
     }
     
     @Override
-    public void ReverseMove(Table tableState, MoveWithDetails move)
+    public void ReverseMove(MoveWithDetails move)
     {
         
         if(move.getStart().getColumn() - move.getEnd().getColumn() == 2)
         {
             // it was a left castling
-            Piece leftRook = tableState.getPiece(this.position.getAdjancent(0, 1));
+            Piece leftRook = this.table.getPiece(this.position.getAdjancent(0, 1));
             leftRook.position = leftRook.position.getAdjancent(0, -3);
         }
         else if(move.getStart().getColumn() - move.getEnd().getColumn() == -2)
         {
             // it was a right castling
-            Piece rightRook = tableState.getPiece(this.position.getAdjancent(0, -1));
+            Piece rightRook = this.table.getPiece(this.position.getAdjancent(0, -1));
             rightRook.position = rightRook.position.getAdjancent(0, 2);
         }
         
-        super.ReverseMove(tableState, move);
+        super.ReverseMove(move);
     }
     
     @Override

@@ -14,9 +14,9 @@ import java.util.List;
  */
 public class Pawn extends Piece{
 
-    public Pawn(Field position, Color color)
+    public Pawn(Field position, Color color, Table table)
     {
-        super(position, color, PieceType.Pawn);
+        super(position, color, PieceType.Pawn, table);
     }
     
     private boolean isOnBaseLine()
@@ -46,7 +46,7 @@ public class Pawn extends Piece{
     }
     
     @Override
-    public List<Field> getControlledFields(Table tableState) {
+    public List<Field> getControlledFields() {
         List<Field> returnList = new ArrayList<>();
         
         Field oneBefore = this.position.getAdjancent(this.moveDirection(), 0);
@@ -54,23 +54,23 @@ public class Pawn extends Piece{
         Field leftBefore = this.position.getAdjancent(this.moveDirection(), -1);
         Field rightBefore = this.position.getAdjancent(this.moveDirection(), 1);
         
-        if(tableState.getPiece(oneBefore) == null)
+        if(this.table.getPiece(oneBefore) == null)
         {
             returnList.add(oneBefore);
-            if(this.isOnBaseLine() && tableState.getPiece(twoBefore) == null)
+            if(this.isOnBaseLine() && this.table.getPiece(twoBefore) == null)
             {
                 returnList.add(twoBefore);
             }
         }
         
-        if(leftBefore != null && tableState.getPiece(leftBefore) != null && 
-                tableState.getPiece(leftBefore).getColor() == this.color.getOpponent())
+        if(leftBefore != null && this.table.getPiece(leftBefore) != null && 
+                this.table.getPiece(leftBefore).getColor() == this.color.getOpponent())
         {
             returnList.add(leftBefore);
         }
         
-        if(rightBefore != null && tableState.getPiece(rightBefore) != null && 
-                tableState.getPiece(rightBefore).getColor() == this.color.getOpponent())
+        if(rightBefore != null && this.table.getPiece(rightBefore) != null && 
+                this.table.getPiece(rightBefore).getColor() == this.color.getOpponent())
         {
             returnList.add(rightBefore);
         }
@@ -78,8 +78,8 @@ public class Pawn extends Piece{
         //special move: en passant
         if(this.isOnEnPassantLine())
         {
-            MoveWithDetails lastMove = tableState.getMoves().get(tableState.getMoves().size() - 1);
-            Piece piece = tableState.getPiece(lastMove.getEnd());
+            MoveWithDetails lastMove = this.table.getMoves().get(this.table.getMoves().size() - 1);
+            Piece piece = this.table.getPiece(lastMove.getEnd());
             if(piece.pieceType == PieceType.Pawn &&
                 Math.abs(lastMove.getEnd().getRow() - lastMove.getStart().getRow()) == 2)
             {
@@ -99,38 +99,37 @@ public class Pawn extends Piece{
     }
 
     @Override
-    public MoveWithDetails Move(Table tableState, Field endField)
+    public MoveWithDetails Move(Field endField)
     {       
-        Piece piece = tableState.getPiece(endField);
+        Piece piece = this.table.getPiece(endField);
         if(piece == null && endField.getColumn() != this.position.getColumn())
         {
             //this is an en passant move
-            Piece capturedPiece = tableState.getPiece(endField.getAdjancent(-this.moveDirection(), 0));
+            Piece capturedPiece = this.table.getPiece(endField.getAdjancent(-this.moveDirection(), 0));
             capturedPiece.position = endField;
             
-            MoveWithDetails move = super.Move(tableState, endField);
+            MoveWithDetails move = super.Move(endField);
             move.setEnPassant(true);
             
             return move;
         }
         
-        return super.Move(tableState, endField);
+        return super.Move(endField);
     }
     
     @Override 
-    public void ReverseMove(Table tableState, MoveWithDetails move)
+    public void ReverseMove(MoveWithDetails move)
     {        
         if(move.isEnPassant())
         {
-            super.ReverseMove(tableState, move);
+            super.ReverseMove(move);
             
             Piece piece = move.getCapturedPiece();          
             piece.position = piece.position.getAdjancent(-this.moveDirection(), 0);
         }
         else
-        {
-        
-            super.ReverseMove(tableState, move);
+        {        
+            super.ReverseMove(move);
         }
     }
     

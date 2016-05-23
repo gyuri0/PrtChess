@@ -14,12 +14,13 @@ import java.util.List;
  */
 public class Queen extends StandardMovePiece {
 
-    public Queen(Field position, Color color)
+    public Queen(Field position, Color color, Table table)
     {
         super(position, color, PieceType.Queen,
                 new int[]{ -1, -1, -1, 0, 0, 1, 1, 1},
                 new int[]{ -1, 0, 1, -1, 1, -1, 0, 1},
-                true
+                true,
+                table
                 );
     }
 

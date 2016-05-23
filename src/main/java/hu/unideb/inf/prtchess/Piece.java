@@ -17,14 +17,15 @@ public abstract class Piece {
     protected Color color;
     protected PieceType pieceType;
     protected int moveCount;
+    protected Table table;
     
-    
-    public Piece(Field position, Color color, PieceType pieceType)
+    public Piece(Field position, Color color, PieceType pieceType, Table table)
     {
         this.position = position;
         this.color = color;
         this.pieceType = pieceType;
         this.moveCount = 0;
+        this.table = table;
     }
     
     public Color getColor()
@@ -59,41 +60,41 @@ public abstract class Piece {
         return this.position.equals(piece.position);
     }
     
-    protected abstract List<Field> getControlledFields(Table tableState);
+    protected abstract List<Field> getControlledFields();
     
-    public List<Field> getAvailableFields(Table tableState)
+    public List<Field> getAvailableFields()
     {
         Field currentField = this.position;
         List<Field> availableFields = new ArrayList<Field>();
-        List<Field> fields = this.getControlledFields(tableState);
+        List<Field> fields = this.getControlledFields();
         for(Field field : fields)
         {
             //Move
-            MoveWithDetails moveResult = this.Move(tableState, field);
+            MoveWithDetails moveResult = this.Move(field);
 
             //Check our king is safe
-            if(!tableState.isKingUnderAttack(this.color))
+            if(!this.table.isKingUnderAttack(this.color))
             {
                 availableFields.add(field);
             }
 
             //Move back
-            this.ReverseMove(tableState, moveResult);
+            this.ReverseMove(moveResult);
         }
 
         this.position = currentField;
         return availableFields;
     }
     
-    public MoveWithDetails Move(Table tableState, Field endField)
+    public MoveWithDetails Move(Field endField)
     {
         MoveWithDetails move = new MoveWithDetails(this.getPosition(), endField);
-        Piece endPiece = tableState.getPiece(endField);
+        Piece endPiece = this.table.getPiece(endField);
         
         if(endField != null)
         {
             move.setCapturedPiece(endPiece);
-            tableState.getPieces().remove(endPiece);
+            this.table.getPieces().remove(endPiece);
         }
         
         this.setPosition(endField);
@@ -102,7 +103,7 @@ public abstract class Piece {
         return move;
     }
     
-    public void ReverseMove(Table tableState, MoveWithDetails move)
+    public void ReverseMove(MoveWithDetails move)
     {
         this.setPosition(move.getStart());
         
@@ -110,13 +111,13 @@ public abstract class Piece {
         
         if(capturedPiece != null)
         {
-            tableState.getPieces().add(capturedPiece);
+            this.table.getPieces().add(capturedPiece);
         }
         
         if(move.getPromotion() != null)
         {
-            tableState.getPieces().remove(this);
-            tableState.getPieces().add(new Pawn(this.position, this.color));
+            this.table.getPieces().remove(this);
+            this.table.getPieces().add(new Pawn(this.position, this.color, this.table));
         }
         
         this.moveCount--;

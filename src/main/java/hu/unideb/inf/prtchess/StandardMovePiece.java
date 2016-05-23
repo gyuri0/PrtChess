@@ -18,16 +18,17 @@ public class StandardMovePiece extends Piece{
     private boolean multiple;
     
     public StandardMovePiece(Field position, Color color, PieceType pieceType,
-            int[] rowDirections, int[] columnDirections, boolean multiple)
+            int[] rowDirections, int[] columnDirections, boolean multiple,
+            Table table)
     {
-        super(position, color, pieceType);
+        super(position, color, pieceType, table);
         this.rowDirections = rowDirections;
         this.columnDirections = columnDirections;
         this.multiple = multiple;
     }
     
     @Override
-    protected List<Field> getControlledFields(Table tableState)
+    protected List<Field> getControlledFields()
     {
         List<Field> returnList = new ArrayList<>();       
         
@@ -37,14 +38,14 @@ public class StandardMovePiece extends Piece{
             
             if(multiple)
             {
-                while(field != null && tableState.getPiece(field) == null)
+                while(field != null && this.table.getPiece(field) == null)
                 {
                     returnList.add(field);
                     field = field.getAdjancent(rowDirections[i], columnDirections[i]);
                 }
             }
             
-            if(field != null && (tableState.getPiece(field) == null || tableState.getPiece(field).color == this.color.getOpponent()))
+            if(field != null && (this.table.getPiece(field) == null || this.table.getPiece(field).color == this.color.getOpponent()))
             {
                 returnList.add(field);
             }

@@ -14,12 +14,13 @@ import java.util.List;
  */
 public class Rook extends StandardMovePiece {
 
-    public Rook(Field position, Color color)
+    public Rook(Field position, Color color, Table table)
     {
         super(position, color, PieceType.Rook,
                 new int[]{ -1, 0, 0, 1},
                 new int[]{ 0, -1, 1, 0},
-                true
+                true,
+                table
                 );
     }
 

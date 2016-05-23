@@ -91,7 +91,7 @@ public class Table {
         {
             if(piece.color == color)
             {
-                fields.addAll(piece.getControlledFields(this));
+                fields.addAll(piece.getControlledFields());
             }
         }
         
@@ -112,7 +112,7 @@ public class Table {
         
         for(Piece piece : pieces)
         {
-            fields.addAll(piece.getAvailableFields(this));
+            fields.addAll(piece.getAvailableFields());
         }
         
         return fields;
@@ -135,20 +135,20 @@ public class Table {
                 row = 7;
             }
             
-            this.pieces.add(new Rook(new Field(row,0), color));
-            this.pieces.add(new Rook(new Field(row,7), color));
-            this.pieces.add(new Knight(new Field(row,1), color));
-            this.pieces.add(new Knight(new Field(row,6), color));
-            this.pieces.add(new Bishop(new Field(row,2), color));
-            this.pieces.add(new Bishop(new Field(row,5), color));
-            this.pieces.add(new Queen(new Field(row,3), color));
-            this.pieces.add(new King(new Field(row,4), color));
+            this.pieces.add(new Rook(new Field(row,0), color, this));
+            this.pieces.add(new Rook(new Field(row,7), color, this));
+            this.pieces.add(new Knight(new Field(row,1), color, this));
+            this.pieces.add(new Knight(new Field(row,6), color, this));
+            this.pieces.add(new Bishop(new Field(row,2), color, this));
+            this.pieces.add(new Bishop(new Field(row,5), color, this));
+            this.pieces.add(new Queen(new Field(row,3), color, this));
+            this.pieces.add(new King(new Field(row,4), color, this));
        }
        
        for(int i=0;i<8;i++)
        {
-           pieces.add(new Pawn(new Field(1, i), Color.White));
-           pieces.add(new Pawn(new Field(6, i), Color.Black));
+           pieces.add(new Pawn(new Field(1, i), Color.White, this));
+           pieces.add(new Pawn(new Field(6, i), Color.Black, this));
        }
        
        this.playerToMove = Color.White;
@@ -171,12 +171,12 @@ public class Table {
         Piece piece = this.getPiece(move.getStart());
         
         if(piece == null || piece.getColor() != playerToMove || 
-                !piece.getAvailableFields(this).contains(move.getEnd()))
+                !piece.getAvailableFields().contains(move.getEnd()))
         {
             return false;
         }
         
-        MoveWithDetails moveWithDetails = piece.Move(this, move.getEnd());
+        MoveWithDetails moveWithDetails = piece.Move(move.getEnd());
         this.moves.add(moveWithDetails);
         this.playerToMove = this.playerToMove.getOpponent();
         return true;
@@ -188,7 +188,7 @@ public class Table {
         {
             MoveWithDetails move = this.moves.remove(this.moves.size() - 1);
             Piece piece = this.getPiece(move.getEnd());
-            piece.ReverseMove(this, move);
+            piece.ReverseMove(move);
 
             this.playerToMove = this.playerToMove.getOpponent();
         }
@@ -232,16 +232,16 @@ public class Table {
         switch(pieceType)
         {
             case Bishop:
-                newPiece = new Bishop(pawnToPromotion.getPosition(), pawnToPromotion.getColor());
+                newPiece = new Bishop(pawnToPromotion.getPosition(), pawnToPromotion.getColor(), this);
                 break;
             case Knight:
-                newPiece = new Knight(pawnToPromotion.getPosition(), pawnToPromotion.getColor());
+                newPiece = new Knight(pawnToPromotion.getPosition(), pawnToPromotion.getColor(), this);
                 break;
             case Queen:
-                newPiece = new Queen(pawnToPromotion.getPosition(), pawnToPromotion.getColor());
+                newPiece = new Queen(pawnToPromotion.getPosition(), pawnToPromotion.getColor(), this);
                 break;
             case Rook:
-                newPiece = new Rook(pawnToPromotion.getPosition(), pawnToPromotion.getColor());
+                newPiece = new Rook(pawnToPromotion.getPosition(), pawnToPromotion.getColor(), this);
                 break;
         }
         
