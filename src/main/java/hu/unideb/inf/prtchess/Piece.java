@@ -65,7 +65,7 @@ public abstract class Piece {
     public List<Field> getAvailableFields()
     {
         Field currentField = this.position;
-        List<Field> availableFields = new ArrayList<Field>();
+        List<Field> availableFields = new ArrayList<>();
         List<Field> fields = this.getControlledFields();
         for(Field field : fields)
         {

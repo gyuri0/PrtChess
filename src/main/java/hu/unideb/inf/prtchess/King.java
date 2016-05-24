@@ -5,6 +5,9 @@
  */
 package hu.unideb.inf.prtchess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author György
@@ -21,31 +24,16 @@ public class King extends StandardMovePiece {
                 );
     }
     
-    /*
+    
     @Override
-    public List<Field> getAvailableFields(Table tableState) {
-        List<Field> returnList = new ArrayList<Field>();
-        
-        int[] rd = new int[]{ -1, -1, -1, 0, 0, 1, 1, 1};
-        int[] cd = new int[]{ -1, 0, 1, -1, 1, -1, 0, 1};
-        
-        for(int i=0;i<rd.length; i++)
-        {
-            Field field = this.position.getAdjancent(rd[i], cd[i]);           
-            
-            if(field != null && 
-                    (tableState.getPiece(field) == null ||
-                    tableState.getPiece(field).color == this.color.getOpponent()))
-            {
-                returnList.add(field);
-            }
-        }
+    public List<Field> getAvailableFields() {
+        List<Field> returnList = new ArrayList<>();
         
         //Special move : castling
         if(this.moveCount == 0)
         {  
             //castling left
-            Piece leftRook = tableState.getPiece(this.position.getAdjancent(0, -4));
+            Piece leftRook = this.table.getPiece(this.position.getAdjancent(0, -4));
             if(leftRook != null && leftRook.moveCount == 0)
             {
                 boolean middleFieldsAreEmpty = true;
@@ -53,15 +41,15 @@ public class King extends StandardMovePiece {
                 
                 for(int i = 1; i <= 3; i++)
                 {
-                    if(tableState.getPiece(this.position.getAdjancent(0, -i)) != null)
+                    if(this.table.getPiece(this.position.getAdjancent(0, -i)) != null)
                     {
                         middleFieldsAreEmpty = false;
                     }
                 }
                 
-                for(int i = 0; i<=4;i++)
+                for(int i = 0; i<=2;i++)
                 {
-                    if(tableState.isFieldUnderAttack(color, this.position.getAdjancent(0, -i)))
+                    if(this.table.isFieldControlledByEnemy(this.color, this.position.getAdjancent(0, -i)))
                     {
                         fieldsAreUnderAttack = true;
                     }
@@ -75,27 +63,40 @@ public class King extends StandardMovePiece {
             }
             
             //castling right
-            Piece rightRook = tableState.getPiece(this.position.getAdjancent(0, 3));
+            Piece rightRook = this.table.getPiece(this.position.getAdjancent(0, 3));
             if(rightRook != null && rightRook.moveCount == 0)
             {
                 boolean middleFieldsAreEmpty = true;
+                boolean fieldsAreUnderAttack = false;
+                
                 for(int i = 1; i <= 2; i++)
                 {
-                    if(tableState.getPiece(this.position.getAdjancent(0, i)) != null)
+                    if(this.table.getPiece(this.position.getAdjancent(0, i)) != null)
                     {
                         middleFieldsAreEmpty = false;
                     }
                 }
-                if(middleFieldsAreEmpty)
+                
+                for(int i = 0; i<=2;i++)
+                {
+                    if(this.table.isFieldControlledByEnemy(this.color, this.position.getAdjancent(0, i)))
+                    {
+                        fieldsAreUnderAttack = true;
+                    }
+                }
+                
+                if(middleFieldsAreEmpty && !fieldsAreUnderAttack)
                 {
                     returnList.add(this.position.getAdjancent(0, 2));
                 }
             }
         }
         
+        returnList.addAll(super.getAvailableFields());
+        
         return returnList;
     }
-    */
+    
     
     @Override 
     public MoveWithDetails Move(Field endField)
