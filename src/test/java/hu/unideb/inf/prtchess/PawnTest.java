@@ -39,4 +39,26 @@ public class PawnTest {
         assertTrue(availableFields.contains(new Field(4, 1)));
         assertTrue(availableFields.contains(new Field(4, 2)));
     }
+    
+    @Test
+    public void enPassantTest()
+    {
+        Table table = new Table();
+        table.initialize();
+        
+        Piece piece = table.getPiece(new Field(1, 2));
+        table.Move(new Move(new Field(1, 2), new Field(3, 2)));
+        table.Move(new Move(new Field(6, 7), new Field(5, 7)));
+        table.Move(new Move(new Field(3, 2), new Field(4, 2)));
+        table.Move(new Move(new Field(6, 3), new Field(4, 3)));
+        
+        //Now en passant is available
+        assertTrue(piece.getAvailableFields().contains(new Field(5, 3)));
+        
+        // and if take this move we remove the enemy piece from (4, 3);
+        assertNotNull(table.getPiece(new Field(4, 3)));
+        table.Move(new Move(new Field(4, 2), new Field(5, 3)));
+        assertNull(table.getPiece(new Field(4, 3)));
+        
+    }
 }

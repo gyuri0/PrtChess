@@ -104,4 +104,52 @@ public class TableTest {
         table.Move(new Move(new Field(7, 3), new Field(3, 7)));
         assertEquals(GameResult.BlackWin, table.getResult());
     }
+    
+    @Test
+    public void CantMoveBeforeKingTest()
+    {
+        Table table = new Table();
+        table.initialize();
+        
+        table.Move(new Move(new Field(1, 4), new Field(2, 4)));
+        table.Move(new Move(new Field(6, 7), new Field(5, 7)));
+        table.Move(new Move(new Field(0, 5), new Field(4, 1)));
+        
+        //now the bishop is bind the (6, 3) pawn so it can't move
+        assertEquals(0, table.getPiece(new Field(6, 3)).getAvailableFields().size());
+    }
+    
+    @Test
+    public void PromotionTest()
+    {
+        Table table = new Table();
+        table.initialize();
+        
+        table.Move(new Move(new Field(1, 0), new Field(3, 0)));
+        table.Move(new Move(new Field(6, 7), new Field(4, 7)));
+        table.Move(new Move(new Field(3, 0), new Field(4, 0)));
+        table.Move(new Move(new Field(4, 7), new Field(3, 7)));
+        table.Move(new Move(new Field(4, 0), new Field(5, 0)));
+        table.Move(new Move(new Field(3, 7), new Field(2, 7)));
+        table.Move(new Move(new Field(5, 0), new Field(6, 1)));
+        table.Move(new Move(new Field(2, 7), new Field(1, 6)));
+        
+        assertNull(table.isNeedToSelectPromotion());       
+        table.Move(new Move(new Field(6, 1), new Field(7, 0)));
+        assertEquals(Color.White, table.isNeedToSelectPromotion());
+        
+        //we are before a promotion now, so we can't move
+        assertFalse(table.Move(new Move(new Field(6,3), new Field(5,3))));
+        
+        table.selectPromotion(PieceType.Bishop);
+        assertEquals(PieceType.Bishop, table.getPiece(new Field(7, 0)).pieceType);
+        
+        //after the promotion we can move again
+        assertTrue(table.Move(new Move(new Field(6,3), new Field(5,3))));
+        
+        table.MoveBack();
+        
+        table.Move(new Move(new Field(1, 6), new Field(0, 7)));
+        assertEquals(Color.Black, table.isNeedToSelectPromotion());
+    }
 }

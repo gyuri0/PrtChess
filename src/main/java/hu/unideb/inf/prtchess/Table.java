@@ -13,8 +13,8 @@ import java.util.List;
  * @author György
  */
 public class Table {
-    private List<Piece> pieces = new ArrayList<Piece>();
-    private List<MoveWithDetails> moves = new ArrayList<MoveWithDetails>();
+    private List<Piece> pieces = new ArrayList<>();
+    private List<MoveWithDetails> moves = new ArrayList<>();
 
     public List<MoveWithDetails> getMoves() {
         return moves;
@@ -168,6 +168,11 @@ public class Table {
     
     public boolean Move(Move move)
     {
+        if(this.isNeedToSelectPromotion() != null)
+        {
+            return false;
+        }
+        
         Piece piece = this.getPiece(move.getStart());
         
         if(piece == null || piece.getColor() != playerToMove || 

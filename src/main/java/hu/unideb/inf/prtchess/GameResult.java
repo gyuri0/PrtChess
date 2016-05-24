@@ -10,5 +10,17 @@ package hu.unideb.inf.prtchess;
  * @author György
  */
 public enum GameResult {
-    BlackWin, WhiteWin, Drawn, Inprogress
+    BlackWin, WhiteWin, Drawn, Inprogress;
+    
+    @Override
+    public String toString()
+    {
+        switch(this){
+            case BlackWin: return "Black won";
+            case WhiteWin: return "White won";
+            case Drawn: return "Drawn";
+            case Inprogress: return "In progress";
+            default: return super.toString();
+        }
+    }
 }
