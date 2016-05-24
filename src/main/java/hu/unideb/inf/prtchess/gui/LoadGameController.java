@@ -68,6 +68,25 @@ public class LoadGameController implements Initializable {
         
     }
     
+    @FXML
+    public void mainMenu(ActionEvent actionEvent)
+    {
+        Parent root;
+        try {
+            Stage stage = (Stage) choiceBox.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Index.fxml"));
+            root = loader.load();
+            
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/styles/Styles.css");
+            stage.setScene(scene);
+            
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public LoadGameController()
     {
 

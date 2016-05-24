@@ -11,5 +11,6 @@
       <Button layoutX="471.0" layoutY="91.0" mnemonicParsing="false" onAction="#moveBack" text="&lt;" />
       <Label fx:id="status" layoutX="470.0" layoutY="154.0" text="Label" />
       <Button layoutX="464.0" layoutY="200.0" mnemonicParsing="false" onAction="#save" text="Save" />
+      <Button layoutX="445.0" layoutY="287.0" mnemonicParsing="false" onAction="#mainMenu" text="Main menu" />
    </children>
 </AnchorPane>

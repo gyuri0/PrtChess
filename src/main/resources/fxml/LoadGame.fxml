@@ -9,5 +9,6 @@
       <ComboBox fx:id="choiceBox" layoutX="79.0" layoutY="163.0" prefWidth="150.0" />
       <Button layoutX="373.0" layoutY="163.0" mnemonicParsing="false" onAction="#loadGame" text="Load" />
       <Button layoutX="457.0" layoutY="163.0" mnemonicParsing="false" onAction="#deleteGame" text="Delete" />
+      <Button layoutX="282.0" layoutY="259.0" mnemonicParsing="false" onAction="#mainMenu" text="Main manu" />
    </children>
 </AnchorPane>

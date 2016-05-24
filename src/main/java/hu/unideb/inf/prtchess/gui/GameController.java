@@ -6,18 +6,25 @@ import hu.unideb.inf.prtchess.Game;
 import hu.unideb.inf.prtchess.Move;
 import hu.unideb.inf.prtchess.Piece;
 import hu.unideb.inf.prtchess.PieceType;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class GameController implements Initializable {
     
@@ -119,6 +126,25 @@ public class GameController implements Initializable {
     private void save()
     {
         this.game.Save();
+    }
+    
+    @FXML
+    private void mainMenu()
+    {
+        Parent root;
+        try {
+            Stage stage = (Stage) tableCanvas.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Index.fxml"));
+            root = loader.load();
+            
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/styles/Styles.css");
+            stage.setScene(scene);
+            
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void Refresh()
